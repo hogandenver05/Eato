@@ -30,6 +30,19 @@ if ($method === 'POST') {
 
     http_response_code(201);
     echo json_encode(['message' => 'Food marked as favorite']);
+
+} elseif ($method === 'GET') {
+    $stmt = $pdo->prepare("
+        SELECT f.id, f.food_name, f.calories
+        FROM foods f
+        JOIN favorites fav ON f.id = fav.food_id
+        WHERE fav.user_id = ?
+    ");
+    $stmt->execute([$user_id]);
+    $favorites = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    echo json_encode(['favorites' => $favorites]);
+
 } else {
     http_response_code(405);
     echo json_encode(['error' => 'Method not allowed']);
