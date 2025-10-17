@@ -19,3 +19,16 @@ if ($method === 'POST') {
     $stmt->execute([$user_id, $food_name, $calories]);
     echo json_encode(['message' => 'Food added successfully', 'food_id' => $pdo->lastInsertId()]);
 }
+
+if ($method === 'GET') {
+    $user_id = $_GET['user_id'] ?? null;
+    if (!$user_id) {
+        echo json_encode(['error' => 'Missing user_id']);
+        exit;
+    }
+
+    $stmt = $pdo->prepare("SELECT * FROM foods WHERE user_id = ?");
+    $stmt->execute([$user_id]);
+    $foods = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    echo json_encode($foods);
+}
