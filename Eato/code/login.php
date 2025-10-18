@@ -14,7 +14,7 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if ($user && password_verify($password, $user['password'])) {
     $payload = [
-        'user_id' => $user['id'],
+        'user_id' => $user['user_id'],
         'iat' => time(),
         'exp' => time() + 3600
     ];
