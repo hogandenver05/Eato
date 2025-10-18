@@ -1,6 +1,6 @@
 # Eato Meal Tracker
 
-A RESTful API built with **PHP** and **MySQL**, created for **ASE 230 Project 1**.
+A RESTful API built with **PHP** and **MySQL**, created for **ASE 230 Project 1 & 2**.
 
 This project implements user registration, login, food tracking, and favorites.
 
@@ -9,9 +9,10 @@ This project implements user registration, login, food tracking, and favorites.
 ## Features
 
 * User registration and authentication (JWT)
-* Add, list, and favorite foods
+* Full CRUD for foods (add, list, fetch single, update, delete)
+* Manage favorite foods (add, remove, list)
 * JSON-based API endpoints
-* Automated API testing
+* Automated API testing (`test_api.sh`)
 * Basic HTML/JS test client
 
 ---
@@ -21,23 +22,27 @@ This project implements user registration, login, food tracking, and favorites.
 ### Authentication
 
 | Method | Endpoint     | Description                        |
-|--------|--------------|------------------------------------|
+| ------ | ------------ | ---------------------------------- |
 | POST   | register.php | Register a new user                |
 | POST   | login.php    | Authenticate a user and return JWT |
 
 ### Foods
 
-| Method | Endpoint  | Description                       |
-|--------|-----------|-----------------------------------|
-| POST   | foods.php | Add a new food (requires JWT)     |
-| GET    | foods.php | List all foods for logged-in user |
+| Method | Endpoint               | Description                       |
+| ------ | ---------------------- | --------------------------------- |
+| POST   | foods.php              | Add a new food (requires JWT)     |
+| GET    | foods.php              | List all foods for logged-in user |
+| GET    | foods.php?food_id=<id> | Fetch a single food by `food_id`  |
+| PUT    | foods.php              | Update a food by `food_id`        |
+| DELETE | foods.php              | Delete a food by `food_id`        |
 
 ### Favorites
 
-| Method | Endpoint      | Description           |
-|--------|---------------|-----------------------|
-| POST   | favorites.php | Mark food as favorite |
-| GET    | favorites.php | List favorite foods   |
+| Method | Endpoint      | Description                  |
+| ------ | ------------- | ---------------------------- |
+| POST   | favorites.php | Mark a food as favorite      |
+| GET    | favorites.php | List favorite foods          |
+| DELETE | favorites.php | Remove a food from favorites |
 
 ---
 
@@ -68,11 +73,29 @@ curl -X POST http://localhost/Eato/Eato/code/foods.php \
   -d '{"food_name":"Banana","calories":105}'
 ```
 
-### List Foods
+### Fetch Single Food
 
 ```bash
-curl -X GET http://localhost/Eato/Eato/code/foods.php \
+curl -X GET "http://localhost/Eato/Eato/code/foods.php?food_id=1" \
   -H "Authorization: Bearer <TOKEN>"
+```
+
+### Update a Food
+
+```bash
+curl -X PUT http://localhost/Eato/Eato/code/foods.php \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <TOKEN>" \
+  -d '{"food_id":1,"food_name":"Apple","calories":95}'
+```
+
+### Delete a Food
+
+```bash
+curl -X DELETE http://localhost/Eato/Eato/code/foods.php \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <TOKEN>" \
+  -d '{"food_id":1}'
 ```
 
 ### Favorite a Food
@@ -91,23 +114,32 @@ curl -X GET http://localhost/Eato/Eato/code/favorites.php \
   -H "Authorization: Bearer <TOKEN>"
 ```
 
+### Remove Favorite
+
+```bash
+curl -X DELETE http://localhost/Eato/Eato/code/favorites.php \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <TOKEN>" \
+  -d '{"food_id":1}'
+```
+
 ---
 
 ## Setup Instructions
 
 ### 1. Database Setup
 
-Log in to mysql
+Log in to MySQL:
 
 ```bash
 mysql -u root -p
 ```
 
-... and paste in the database schema located in `Eato/code`
+Then run the schema in `Eato/code/schema.sql`.
 
-### 2. Environment
+### 2. Environment Variables
 
-Create `.env` in the root folder:
+Create a `.env` file in the project root:
 
 ```
 DB_HOST=localhost
@@ -117,9 +149,8 @@ DB_PASS=yourpassword
 JWT_SECRET=your_secret_key
 ```
 
-### 3. Copy Files to Apache
+### 3. Deploy to Apache
 
-From the root folder:
 ```bash
 sudo cp -r ./* /var/www/html/Eato
 sudo chown -R www-data:www-data /var/www/html/Eato
@@ -127,16 +158,16 @@ sudo chmod -R 755 /var/www/html/Eato
 sudo systemctl reload apache2
 ```
 
-### 4. Test
+### 4. Testing
 
-* Open HTML/JS test client: `http://localhost/Eato/Eato/code/index.html`
-* Or use `test_api.sh` located in `Eato/code` to run automated endpoint tests
+* Open the HTML/JS client at `http://localhost/Eato/Eato/code/index.html`
+* Or run automated tests with `test_api.sh` in `Eato/code`
 
 ---
 
-## Next Steps (Project 2)
+## Next Steps
 
-* Laravel reimplementation of API
-* Docker containerization
-* Hugo documentation
-* GitHub Pages deployment
+* Containerize with Docker
+* Deploy documentation via Hugo to GitHub Pages
+* Enhance test client UI/UX
+* Expand features to track macros, not just calories
