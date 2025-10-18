@@ -33,15 +33,29 @@ if ($method === 'POST') {
 
 } elseif ($method === 'GET') {
     $stmt = $pdo->prepare("
-        SELECT f.id, f.food_name, f.calories
+        SELECT f.food_id, f.food_name, f.calories
         FROM foods f
-        JOIN favorites fav ON f.id = fav.food_id
+        JOIN favorites fav ON f.food_id = fav.food_id
         WHERE fav.user_id = ?
     ");
     $stmt->execute([$user_id]);
     $favorites = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     echo json_encode(['favorites' => $favorites]);
+
+} elseif ($method === 'DELETE') {
+    $data = json_decode(file_get_contents('php://input'), true);
+    $food_id = $data['food_id'] ?? null;
+
+    if (!$food_id) {
+        http_response_code(400);
+        echo json_encode(['error' => 'Missing food_id']);
+        exit;
+    }
+
+    $stmt = $pdo->prepare("DELETE FROM favorites WHERE user_id = ? AND food_id = ?");
+    $stmt->execute([$user_id, $food_id]);
+    echo json_encode(['message' => 'Favorite removed']);
 
 } else {
     http_response_code(405);
