@@ -43,6 +43,20 @@ if ($method === 'POST') {
 
     echo json_encode(['favorites' => $favorites]);
 
+} elseif ($method === 'DELETE') {
+    $data = json_decode(file_get_contents('php://input'), true);
+    $food_id = $data['food_id'] ?? null;
+
+    if (!$food_id) {
+        http_response_code(400);
+        echo json_encode(['error' => 'Missing food_id']);
+        exit;
+    }
+
+    $stmt = $pdo->prepare("DELETE FROM favorites WHERE user_id = ? AND food_id = ?");
+    $stmt->execute([$user_id, $food_id]);
+    echo json_encode(['message' => 'Favorite removed']);
+
 } else {
     http_response_code(405);
     echo json_encode(['error' => 'Method not allowed']);
