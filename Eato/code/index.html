@@ -39,9 +39,24 @@
     </div>
 
     <div>
+        <h2>Update Food</h2>
+        <button onclick="updateFood()">Update Food</button>
+    </div>
+
+    <div>
+        <h2>Delete Food</h2>
+        <button onclick="deleteFood()">Delete Food</button>
+    </div>
+
+    <div>
         <h2>Add Favorite</h2>
         <input id="fav_food_id" placeholder="Food ID" type="number">
         <button onclick="addFavorite()">Add Favorite</button>
+    </div>
+
+    <div>
+        <h2>Remove Favorite</h2>
+        <button onclick="removeFavorite()">Remove Favorite</button>
     </div>
 
     <div>
@@ -54,6 +69,7 @@
     <div id="output"></div>
 
     <script>
+        const API_BASE = 'http://localhost/Eato/Eato/code';
         let token = '';
 
         function prettyPrint(obj) {
@@ -63,7 +79,7 @@
         async function register() {
             const username = document.getElementById('reg_username').value;
             const password = document.getElementById('reg_password').value;
-            const res = await fetch('register.php', {
+            const res = await fetch(`${API_BASE}/register.php`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username, password })
@@ -75,7 +91,7 @@
         async function login() {
             const username = document.getElementById('login_username').value;
             const password = document.getElementById('login_password').value;
-            const res = await fetch('login.php', {
+            const res = await fetch(`${API_BASE}/login.php`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username, password })
@@ -88,7 +104,7 @@
         async function addFood() {
             const food_name = document.getElementById('food_name').value;
             const calories = parseInt(document.getElementById('food_calories').value);
-            const res = await fetch('foods.php', {
+            const res = await fetch(`${API_BASE}/foods.php`, {
                 method: 'POST',
                 headers: { 
                     'Content-Type': 'application/json',
@@ -101,8 +117,47 @@
         }
 
         async function listFoods() {
-            const res = await fetch('foods.php', {
+            const res = await fetch(`${API_BASE}/foods.php`, {
                 headers: { 'Authorization': 'Bearer ' + token }
+            });
+            const data = await res.json();
+            prettyPrint(data);
+        }
+
+        async function updateFood() {
+            const food_id = parseInt(prompt("Enter Food ID to update:"));
+            if (!food_id) return alert("Enter a valid Food ID");
+
+            const food_name = prompt("New food name (leave blank to skip):");
+            const calories = prompt("New calories (leave blank to skip):");
+
+            const body = { food_id };
+            if (food_name) body.food_name = food_name;
+            if (calories) body.calories = parseInt(calories);
+
+            const res = await fetch(`${API_BASE}/foods.php`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                },
+                body: JSON.stringify(body)
+            });
+            const data = await res.json();
+            prettyPrint(data);
+        }
+
+        async function deleteFood() {
+            const food_id = parseInt(prompt("Enter Food ID to delete:"));
+            if (!food_id) return alert("Enter a valid Food ID");
+
+            const res = await fetch(`${API_BASE}/foods.php`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                },
+                body: JSON.stringify({ food_id })
             });
             const data = await res.json();
             prettyPrint(data);
@@ -110,11 +165,9 @@
 
         async function addFavorite() {
             const food_id = parseInt(document.getElementById('fav_food_id').value);
-            if (!food_id) {
-                alert("Enter a valid Food ID");
-                return;
-            }
-            const res = await fetch('favorites.php', {
+            if (!food_id) return alert("Enter a valid Food ID");
+
+            const res = await fetch(`${API_BASE}/favorites.php`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -126,8 +179,24 @@
             prettyPrint(data);
         }
 
+        async function removeFavorite() {
+            const food_id = parseInt(prompt("Enter Food ID to remove from favorites:"));
+            if (!food_id) return alert("Enter a valid Food ID");
+
+            const res = await fetch(`${API_BASE}/favorites.php`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                },
+                body: JSON.stringify({ food_id })
+            });
+            const data = await res.json();
+            prettyPrint(data);
+        }
+
         async function listFavorites() {
-            const res = await fetch('favorites.php', {
+            const res = await fetch(`${API_BASE}/favorites.php`, {
                 headers: { 'Authorization': 'Bearer ' + token }
             });
             const data = await res.json();
