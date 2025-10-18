@@ -27,11 +27,24 @@ if ($method === 'POST') {
     ]);
 
 } elseif ($method === 'GET') {
-    $stmt = $pdo->prepare("SELECT * FROM foods WHERE user_id = ?");
-    $stmt->execute([$user_id]);
-    $foods = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $food_id = $_GET['food_id'] ?? null;
 
-    echo json_encode(['foods' => $foods]);
+    if ($food_id) {
+        $stmt = $pdo->prepare("SELECT * FROM foods WHERE food_id = ? AND user_id = ?");
+        $stmt->execute([$food_id, $user_id]);
+        $food = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($food) {
+            echo json_encode($food);
+        } else {
+            http_response_code(404);
+            echo json_encode(['error' => 'Food not found']);
+        }
+    } else {
+        $stmt = $pdo->prepare("SELECT * FROM foods WHERE user_id = ?");
+        $stmt->execute([$user_id]);
+        $foods = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        echo json_encode(['foods' => $foods]);
+    }
 
 } elseif ($method === 'PUT') {
     $data = json_decode(file_get_contents('php://input'), true);
