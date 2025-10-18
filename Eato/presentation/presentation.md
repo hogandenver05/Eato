@@ -16,15 +16,15 @@ Created by Denver Hogan
 * Backend: PHP REST API with MySQL
 * Frontend: HTML/JS test client
 * Authentication: JWT tokens
-* Deployment: Apache, optional Docker
+* Deployment: Apache
 
 ---
 
 ## Features
 
 1. User registration and login
-2. Add and list foods
-3. Mark and list favorites
+2. Full CRUD for foods (add, list, update, delete, fetch single by food_id)
+3. Favorites management (add, remove, list)
 4. Automated API tests
 5. Basic HTML/JS test client
 
@@ -39,12 +39,19 @@ Created by Denver Hogan
 | POST   | /register.php | Register a new user |
 | POST   | /login.php    | Authenticate a user |
 
+---
+
+## API Endpoints *(cont'd...)*
+
 ### Foods
 
-| Method | Endpoint   | Description                 |
-| ------ | ---------- | --------------------------- |
-| POST   | /foods.php | Add a food item             |
-| GET    | /foods.php | List foods for current user |
+| Method | Endpoint                | Description                     |
+| ------ | ----------------------- | ------------------------------- |
+| POST   | /foods.php              | Add a food item                 |
+| GET    | /foods.php              | List all foods for current user |
+| GET    | /foods.php?food_id=<id> | Fetch single food by `food_id`  |
+| PUT    | /foods.php              | Update a food by `food_id`      |
+| DELETE | /foods.php              | Delete a food by `food_id`      |
 
 ---
 
@@ -52,10 +59,12 @@ Created by Denver Hogan
 
 ### Favorites
 
-| Method | Endpoint       | Description             |
-| ------ | -------------- | ----------------------- |
-| POST   | /favorites.php | Mark a food as favorite |
-| GET    | /favorites.php | List favorite foods     |
+| Method | Endpoint       | Description                  |
+| ------ | -------------- | ---------------------------- |
+| POST   | /favorites.php | Mark a food as favorite      |
+| GET    | /favorites.php | List favorite foods          |
+| DELETE | /favorites.php | Remove a food from favorites |
+
 
 ---
 
@@ -87,7 +96,7 @@ sudo systemctl reload apache2
 
 ## Testing
 
-* Use `test_api.sh` to verify API functionality
+* Use `test_api.sh` to verify full API functionality
 * Can also use HTML/JS client for manual testing
 
 ---
