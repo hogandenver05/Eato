@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 BASE_URL="http://localhost/Eato/Eato/code"
 USERNAME="testuser"
@@ -75,7 +76,7 @@ echo
 # -----------------------------
 # 6. Add food with missing name (should fail)
 # -----------------------------
-echo "=== Adding food with missing name ==="
+echo "=== Adding food with missing name (should fail) ==="
 ADD_FOOD_FAIL=$(curl -s -X POST "$BASE_URL/foods.php" \
     -H "Content-Type: application/json" \
     -H "Authorization: Bearer $TOKEN" \
@@ -84,7 +85,7 @@ pretty "$ADD_FOOD_FAIL"
 echo
 
 # -----------------------------
-# 7. Get foods
+# 7. Get all foods
 # -----------------------------
 echo "=== Listing foods ==="
 LIST_FOODS=$(curl -s -X GET "$BASE_URL/foods.php" \
@@ -124,10 +125,34 @@ pretty "$LIST_FAVS"
 echo
 
 # -----------------------------
-# 11. Invalid HTTP method
+# 11. Unfavorite
+# -----------------------------
+echo "=== Removing favorite ==="
+UNFAV=$(curl -s -X DELETE "$BASE_URL/favorites.php" \
+    -H "Content-Type: application/json" \
+    -H "Authorization: Bearer $TOKEN" \
+    -d "{\"food_id\":$FOOD_ID}")
+pretty "$UNFAV"
+echo
+
+# -----------------------------
+# 12. Delete food
+# -----------------------------
+echo "=== Deleting food ==="
+DELETE_FOOD=$(curl -s -X DELETE "$BASE_URL/foods.php" \
+    -H "Content-Type: application/json" \
+    -H "Authorization: Bearer $TOKEN" \
+    -d "{\"id\":$FOOD_ID}")
+pretty "$DELETE_FOOD"
+echo
+
+# -----------------------------
+# 13. Invalid method test
 # -----------------------------
 echo "=== Testing invalid HTTP method on foods ==="
-INVALID_METHOD=$(curl -s -X DELETE "$BASE_URL/foods.php" \
+INVALID_METHOD=$(curl -s -X PATCH "$BASE_URL/foods.php" \
     -H "Authorization: Bearer $TOKEN")
 pretty "$INVALID_METHOD"
 echo
+
+echo "=== All tests complete ==="
