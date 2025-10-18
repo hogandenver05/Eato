@@ -45,7 +45,7 @@ if ($method === 'POST') {
         exit;
     }
 
-    $stmt = $pdo->prepare("SELECT * FROM foods WHERE id = ? AND user_id = ?");
+    $stmt = $pdo->prepare("SELECT * FROM foods WHERE food_id = ? AND user_id = ?");
     $stmt->execute([$food_id, $user_id]);
     if (!$stmt->fetch()) {
         http_response_code(404);
@@ -67,7 +67,7 @@ if ($method === 'POST') {
     if ($fields) {
         $params[] = $food_id;
         $params[] = $user_id;
-        $sql = "UPDATE foods SET ".implode(',', $fields)." WHERE id = ? AND user_id = ?";
+        $sql = "UPDATE foods SET ".implode(',', $fields)." WHERE food_id = ? AND user_id = ?";
         $pdo->prepare($sql)->execute($params);
     }
 
@@ -84,7 +84,7 @@ if ($method === 'POST') {
     }
 
     try {
-        $stmt = $pdo->prepare("DELETE FROM foods WHERE id = ? AND user_id = ?");
+        $stmt = $pdo->prepare("DELETE FROM foods WHERE food_id = ? AND user_id = ?");
         $stmt->execute([$food_id, $user_id]);
         echo json_encode(['message' => 'Food deleted successfully']);
     } catch (PDOException $e) {

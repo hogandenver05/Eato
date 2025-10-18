@@ -33,9 +33,9 @@ if ($method === 'POST') {
 
 } elseif ($method === 'GET') {
     $stmt = $pdo->prepare("
-        SELECT f.id, f.food_name, f.calories
+        SELECT f.food_id, f.food_name, f.calories
         FROM foods f
-        JOIN favorites fav ON f.id = fav.food_id
+        JOIN favorites fav ON f.food_id = fav.food_id
         WHERE fav.user_id = ?
     ");
     $stmt->execute([$user_id]);
