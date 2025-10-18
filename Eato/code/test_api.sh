@@ -94,7 +94,18 @@ pretty "$LIST_FOODS"
 echo
 
 # -----------------------------
-# 8. Add favorite
+# 8. Get single food by food_id
+# -----------------------------
+echo "=== Fetch single food by food_id ==="
+SINGLE_FOOD=$(curl -s -X GET "$BASE_URL/foods.php" \
+    -H "Content-Type: application/json" \
+    -H "Authorization: Bearer $TOKEN" \
+    -d "{\"food_id\":$FOOD_ID}")
+pretty "$SINGLE_FOOD"
+echo
+
+# -----------------------------
+# 9. Add favorite
 # -----------------------------
 echo "=== Adding favorite ==="
 ADD_FAV=$(curl -s -X POST "$BASE_URL/favorites.php" \
@@ -105,7 +116,7 @@ pretty "$ADD_FAV"
 echo
 
 # -----------------------------
-# 9. Add duplicate favorite (should fail)
+# 10. Add duplicate favorite (should fail)
 # -----------------------------
 echo "=== Adding duplicate favorite ==="
 ADD_FAV_DUP=$(curl -s -X POST "$BASE_URL/favorites.php" \
@@ -116,7 +127,7 @@ pretty "$ADD_FAV_DUP"
 echo
 
 # -----------------------------
-# 10. List favorites
+# 11. List favorites
 # -----------------------------
 echo "=== Listing favorites ==="
 LIST_FAVS=$(curl -s -X GET "$BASE_URL/favorites.php" \
@@ -125,7 +136,7 @@ pretty "$LIST_FAVS"
 echo
 
 # -----------------------------
-# 11. Unfavorite
+# 12. Unfavorite
 # -----------------------------
 echo "=== Removing favorite ==="
 UNFAV=$(curl -s -X DELETE "$BASE_URL/favorites.php" \
@@ -136,18 +147,18 @@ pretty "$UNFAV"
 echo
 
 # -----------------------------
-# 12. Delete food
+# 13. Delete food
 # -----------------------------
 echo "=== Deleting food ==="
 DELETE_FOOD=$(curl -s -X DELETE "$BASE_URL/foods.php" \
     -H "Content-Type: application/json" \
     -H "Authorization: Bearer $TOKEN" \
-    -d "{\"id\":$FOOD_ID}")
+    -d "{\"food_id\":$FOOD_ID}")
 pretty "$DELETE_FOOD"
 echo
 
 # -----------------------------
-# 13. Invalid method test
+# 14. Invalid method test
 # -----------------------------
 echo "=== Testing invalid HTTP method on foods ==="
 INVALID_METHOD=$(curl -s -X PATCH "$BASE_URL/foods.php" \

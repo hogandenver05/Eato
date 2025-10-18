@@ -39,6 +39,11 @@
     </div>
 
     <div>
+        <h2>Get Single Food</h2>
+        <button onclick="getFood()">Get Food by ID</button>
+    </div>
+
+    <div>
         <h2>Update Food</h2>
         <button onclick="updateFood()">Update Food</button>
     </div>
@@ -50,7 +55,6 @@
 
     <div>
         <h2>Add Favorite</h2>
-        <input id="fav_food_id" placeholder="Food ID" type="number">
         <button onclick="addFavorite()">Add Favorite</button>
     </div>
 
@@ -124,16 +128,30 @@
             prettyPrint(data);
         }
 
+        async function getFood() {
+            const food_id = parseInt(prompt("Enter Food ID to fetch:"));
+            if (!food_id) return alert("Enter a valid Food ID");
+
+            const res = await fetch(`${API_BASE}/foods.php?food_id=${food_id}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
+            });
+            const data = await res.json();
+            prettyPrint(data);
+        }
+
         async function updateFood() {
             const food_id = parseInt(prompt("Enter Food ID to update:"));
             if (!food_id) return alert("Enter a valid Food ID");
 
             const food_name = prompt("New food name (leave blank to skip):");
-            const calories = prompt("New calories (leave blank to skip):");
+            const calories = parseInt(prompt("New calories (leave blank to skip):"));
 
             const body = { food_id };
             if (food_name) body.food_name = food_name;
-            if (calories) body.calories = parseInt(calories);
+            if (calories) body.calories = calories;
 
             const res = await fetch(`${API_BASE}/foods.php`, {
                 method: 'PUT',
@@ -164,7 +182,7 @@
         }
 
         async function addFavorite() {
-            const food_id = parseInt(document.getElementById('fav_food_id').value);
+            const food_id = parseInt(prompt("Enter Food ID to favorite:"));
             if (!food_id) return alert("Enter a valid Food ID");
 
             const res = await fetch(`${API_BASE}/favorites.php`, {
