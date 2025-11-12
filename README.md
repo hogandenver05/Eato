@@ -1,4 +1,4 @@
-# Eato Meal Tracker
+# 🍎 Eato Meal Tracker
 
 A RESTful API built with **PHP** and **MySQL**, created for **ASE 230 Project 1 & 2**.
 
