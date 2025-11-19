@@ -7,10 +7,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Food extends Model
 {
-    
+    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory;
 
-    protected $table = 'foods';  // explicitly tell Laravel the table name
     protected $fillable = ['user_id', 'food_name', 'calories'];
 
     public function user()
