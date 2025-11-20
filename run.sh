@@ -45,6 +45,18 @@ php artisan migrate
 echo "Clearing caches"
 php artisan optimize:clear
 
-# Step eight: start Laravel development server
+# Step eight: storage and permissions setup
+echo "Fixing storage and cache permissions"
+
+mkdir -p storage/framework/cache
+mkdir -p storage/framework/sessions
+mkdir -p storage/framework/views
+
+chmod -R 775 storage
+chmod -R 775 bootstrap/cache
+
+echo "Permissions updated"
+
+# Step nine: start Laravel development server
 echo "Starting server at http://localhost:8000"
 php artisan serve
