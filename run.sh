@@ -27,14 +27,24 @@ fi
 echo "Generating application key"
 php artisan key:generate
 
-# Step five: run migrations
+# Step five: verify database settings
+echo "Checking database connection"
+
+php artisan db:show >/dev/null 2>&1 || {
+    echo "Database connection failed"
+    exit 1
+}
+
+echo "Database connection successful"
+
+# Step six: run migrations
 echo "Running migrations"
 php artisan migrate
 
-# Step six: clear caches
+# Step seven: clear caches
 echo "Clearing caches"
 php artisan optimize:clear
 
-# Step seven: start Laravel development server
+# Step eight: start Laravel development server
 echo "Starting server at http://localhost:8000"
 php artisan serve
