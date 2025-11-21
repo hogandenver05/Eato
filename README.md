@@ -1,48 +1,51 @@
 # 🍎 Eato Meal Tracker
 
-A RESTful API built with **PHP** and **MySQL**, created for **ASE 230 Project 1 & 2**.
+A RESTful API built with **Laravel** and **MySQL**, created for **ASE 230 Project 1 & 2**.
 
-This project implements user registration, login, food tracking, and favorites.
+This project implements user registration, login, food tracking, and favorites using Laravel Sanctum for authentication.
 
 ---
 
 ## Features
 
-* User registration and authentication (JWT)
+* User registration and authentication (Laravel Sanctum)
 * Full CRUD for foods (add, list, fetch single, update, delete)
 * Manage favorite foods (add, remove, list)
 * JSON-based API endpoints
-* Automated API testing (`test_api.sh`)
-* Basic HTML/JS test client
+* Docker containerization for easy deployment
+* Automated deployment scripts
 
 ---
 
 ## API Endpoints
 
+All API endpoints are prefixed with `/api`. Base URL: `http://localhost:8000/api`
+
 ### Authentication
 
-| Method | Endpoint     | Description                        |
-| ------ | ------------ | ---------------------------------- |
-| POST   | register.php | Register a new user                |
-| POST   | login.php    | Authenticate a user and return JWT |
+| Method | Endpoint           | Description                                    |
+| ------ | ------------------ | ---------------------------------------------- |
+| POST   | `/api/register`    | Register a new user                            |
+| POST   | `/api/login`       | Authenticate a user and return Sanctum token   |
+| POST   | `/api/logout`      | Logout and revoke current token (requires auth) |
 
 ### Foods
 
-| Method | Endpoint               | Description                       |
-| ------ | ---------------------- | --------------------------------- |
-| POST   | foods.php              | Add a new food (requires JWT)     |
-| GET    | foods.php              | List all foods for logged-in user |
-| GET    | foods.php?food_id=<id> | Fetch a single food by `food_id`  |
-| PUT    | foods.php              | Update a food by `food_id`        |
-| DELETE | foods.php              | Delete a food by `food_id`        |
+| Method | Endpoint              | Description                       |
+| ------ | --------------------- | --------------------------------- |
+| POST   | `/api/foods`          | Add a new food (requires auth)    |
+| GET    | `/api/foods`          | List all foods for logged-in user |
+| GET    | `/api/foods/{id}`     | Fetch a single food by ID         |
+| PUT    | `/api/foods/{id}`     | Update a food by ID               |
+| DELETE | `/api/foods/{id}`     | Delete a food by ID               |
 
 ### Favorites
 
-| Method | Endpoint      | Description                  |
-| ------ | ------------- | ---------------------------- |
-| POST   | favorites.php | Mark a food as favorite      |
-| GET    | favorites.php | List favorite foods          |
-| DELETE | favorites.php | Remove a food from favorites |
+| Method | Endpoint                | Description                  |
+| ------ | ----------------------- | ---------------------------- |
+| POST   | `/api/favorites`        | Mark a food as favorite      |
+| GET    | `/api/favorites`        | List favorite foods          |
+| DELETE | `/api/favorites/{id}`   | Remove a food from favorites |
 
 ---
 
@@ -51,7 +54,7 @@ This project implements user registration, login, food tracking, and favorites.
 ### Register a User
 
 ```bash
-curl -X POST http://localhost/Eato/Eato/code/register.php \
+curl -X POST http://localhost:8000/api/register \
   -H "Content-Type: application/json" \
   -d '{"username":"alice","password":"secret123"}'
 ```
@@ -59,15 +62,23 @@ curl -X POST http://localhost/Eato/Eato/code/register.php \
 ### Login and Retrieve Token
 
 ```bash
-curl -X POST http://localhost/Eato/Eato/code/login.php \
+curl -X POST http://localhost:8000/api/login \
   -H "Content-Type: application/json" \
   -d '{"username":"alice","password":"secret123"}'
+```
+
+Response:
+```json
+{
+  "message": "Login successful",
+  "token": "1|abc123def456..."
+}
 ```
 
 ### Add a Food
 
 ```bash
-curl -X POST http://localhost/Eato/Eato/code/foods.php \
+curl -X POST http://localhost:8000/api/foods \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer <TOKEN>" \
   -d '{"food_name":"Banana","calories":105}'
@@ -76,32 +87,30 @@ curl -X POST http://localhost/Eato/Eato/code/foods.php \
 ### Fetch Single Food
 
 ```bash
-curl -X GET "http://localhost/Eato/Eato/code/foods.php?food_id=1" \
+curl -X GET http://localhost:8000/api/foods/1 \
   -H "Authorization: Bearer <TOKEN>"
 ```
 
 ### Update a Food
 
 ```bash
-curl -X PUT http://localhost/Eato/Eato/code/foods.php \
+curl -X PUT http://localhost:8000/api/foods/1 \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer <TOKEN>" \
-  -d '{"food_id":1,"food_name":"Apple","calories":95}'
+  -d '{"food_name":"Apple","calories":95}'
 ```
 
 ### Delete a Food
 
 ```bash
-curl -X DELETE http://localhost/Eato/Eato/code/foods.php \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer <TOKEN>" \
-  -d '{"food_id":1}'
+curl -X DELETE http://localhost:8000/api/foods/1 \
+  -H "Authorization: Bearer <TOKEN>"
 ```
 
 ### Favorite a Food
 
 ```bash
-curl -X POST http://localhost/Eato/Eato/code/favorites.php \
+curl -X POST http://localhost:8000/api/favorites \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer <TOKEN>" \
   -d '{"food_id":1}'
@@ -110,64 +119,171 @@ curl -X POST http://localhost/Eato/Eato/code/favorites.php \
 ### List Favorites
 
 ```bash
-curl -X GET http://localhost/Eato/Eato/code/favorites.php \
+curl -X GET http://localhost:8000/api/favorites \
   -H "Authorization: Bearer <TOKEN>"
 ```
 
 ### Remove Favorite
 
 ```bash
-curl -X DELETE http://localhost/Eato/Eato/code/favorites.php \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer <TOKEN>" \
-  -d '{"food_id":1}'
+curl -X DELETE http://localhost:8000/api/favorites/1 \
+  -H "Authorization: Bearer <TOKEN>"
 ```
 
 ---
 
 ## Setup Instructions
 
-### 1. Database Setup
+### Option 1: Docker Deployment (Recommended)
 
-Log in to MySQL:
+The easiest way to get started is using Docker. This will automatically set up the database and Laravel application.
 
-```bash
-mysql -u root -p
-```
+#### Prerequisites
 
-Then run the schema in `Eato/code/schema.sql`.
+- Docker and Docker Compose installed
+  - [Docker Desktop](https://www.docker.com/products/docker-desktop) (macOS/Windows)
+  - Or [Colima](https://github.com/abiosoft/colima) (lightweight alternative): `brew install colima docker docker-compose`
 
-### 2. Environment Variables
+#### Quick Start
 
-Create a `.env` file in the project root:
-
-```
-DB_HOST=localhost
-DB_NAME=eato
-DB_USER=root
-DB_PASS=yourpassword
-JWT_SECRET=your_secret_key
-```
-
-### 3. Deploy to Apache
+1. **Run the setup script:**
 
 ```bash
-sudo cp -r ./* /var/www/html/Eato
-sudo chown -R www-data:www-data /var/www/html/Eato
-sudo chmod -R 755 /var/www/html/Eato
-sudo systemctl reload apache2
+./setup.sh
 ```
 
-### 4. Testing
+This script will:
+- Check for Docker installation
+- Build Docker containers
+- Start MySQL and Laravel services
+- Wait for database to be ready
+- Run migrations
+- Generate application key
 
-* Open the HTML/JS client at `http://localhost/Eato/Eato/code/index.html`
-* Or run automated tests with `test_api.sh` in `Eato/code`
+2. **Access the API:**
+
+The API will be available at `http://localhost:8000/api`
+
+#### Manual Docker Commands
+
+If you prefer to run commands manually:
+
+```bash
+# Copy Docker environment file
+cp .env.docker .env
+
+# Build and start containers
+docker-compose up -d
+
+# Wait for database, then run migrations
+docker-compose exec app php artisan migrate
+
+# Generate application key
+docker-compose exec app php artisan key:generate
+```
+
+#### Stop Containers
+
+```bash
+docker-compose down
+```
+
+#### View Logs
+
+```bash
+# All services
+docker-compose logs -f
+
+# Specific service
+docker-compose logs -f app
+docker-compose logs -f db
+```
+
+### Option 2: Local Development (Without Docker)
+
+#### Prerequisites
+
+- PHP 8.2+
+- Composer
+- MySQL 8.0+
+
+#### Setup Steps
+
+1. **Install dependencies:**
+
+```bash
+composer install
+```
+
+2. **Configure environment:**
+
+```bash
+cp .env.example .env
+php artisan key:generate
+```
+
+Edit `.env` with your database credentials:
+
+```
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=eato
+DB_USERNAME=root
+DB_PASSWORD=yourpassword
+```
+
+3. **Run migrations:**
+
+```bash
+php artisan migrate
+```
+
+4. **Start the development server:**
+
+```bash
+php artisan serve
+```
+
+Or use the automated script:
+
+```bash
+./run.sh
+```
+
+The API will be available at `http://localhost:8000/api`
+
+---
+
+## Testing
+
+Run the test suite:
+
+```bash
+# With Docker
+docker-compose exec app php artisan test
+
+# Local development
+php artisan test
+```
+
+---
+
+## Project Structure
+
+- `app/Http/Controllers/` - API controllers
+- `app/Models/` - Eloquent models
+- `routes/api.php` - API route definitions
+- `database/migrations/` - Database migrations
+- `docker-compose.yml` - Docker services configuration
+- `Dockerfile` - Laravel application container
+- `setup.sh` - Docker deployment script
+- `run.sh` - Local development deployment script
 
 ---
 
 ## Next Steps
 
-* Containerize with Docker
 * Deploy documentation via Hugo to GitHub Pages
 * Enhance test client UI/UX
 * Expand features to track macros, not just calories
