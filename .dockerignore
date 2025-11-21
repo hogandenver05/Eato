@@ -1,0 +1,60 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Environment files (will be copied from .env.docker)
+.env
+.env.*
+!.env.docker
+
+# IDE
+.idea
+.vscode
+.fleet
+.phpactor.json
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Dependencies (will be installed in container)
+/vendor
+/node_modules
+
+# Build artifacts
+/public/build
+/public/hot
+/public/storage
+
+# Logs
+*.log
+/storage/*.log
+/storage/logs/*
+
+# Cache
+/bootstrap/cache/*
+!/bootstrap/cache/.gitignore
+/storage/framework/cache/*
+/storage/framework/sessions/*
+/storage/framework/views/*
+/.phpunit.cache
+
+# Testing
+/phpunit.xml
+/tests
+
+# Documentation
+*.md
+!README.md
+
+# Docker files (don't need to copy these into the image)
+docker-compose.yml
+Dockerfile
+.dockerignore
+setup.sh
+run.sh
+
