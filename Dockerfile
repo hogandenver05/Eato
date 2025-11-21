@@ -10,6 +10,7 @@ RUN apt-get update && apt-get install -y \
     libonig-dev \
     libxml2-dev \
     libzip-dev \
+    iputils-ping \
     && docker-php-ext-install pdo pdo_mysql zip
 
 # install composer
@@ -20,6 +21,9 @@ WORKDIR /var/www/html
 
 # copy application
 COPY . .
+
+# mark the working directory as safe
+RUN git config --global --add safe.directory /var/www/html
 
 # install dependencies
 RUN composer install
