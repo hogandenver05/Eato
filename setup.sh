@@ -4,26 +4,27 @@ echo "Starting Docker deployment"
 
 set -e
 
-# Step one: copy docker environment file
+# step one: copy docker environment if missing
 if [ ! -f .env ]; then
     echo "Applying docker environment"
     cp .env.docker .env
 fi
 
-# Step two: generate key
-echo "Generating application key"
-docker compose run --rm app php artisan key:generate
-
-# Step three: build and start containers
+# step two: build containers
 echo "Building containers"
-docker compose build
+docker-compose build
 
+# step three: start containers
 echo "Starting containers"
-docker compose up -d
+docker-compose up -d
 
-# Step four: run migrations
+# step four: generate application key
+echo "Generating application key"
+docker-compose exec app php artisan key:generate
+
+# Step five: run migrations
 echo "Running migrations"
-docker compose exec app php artisan migrate
+docker-compose exec app php artisan migrate
 
 echo "Docker deployment complete"
 echo "Laravel available at http://localhost:8000"
