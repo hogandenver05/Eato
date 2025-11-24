@@ -17,6 +17,11 @@ title = 'Eato Meal Tracker - Portfolio'
     name = 'Portfolio'
     url = '/portfolio/'
     weight = 2
+  [[menu.main]]
+    identifier = 'api-client'
+    name = 'API Client'
+    url = '/api-client/'
+    weight = 3
 
 [markup]
   [markup.goldmark]

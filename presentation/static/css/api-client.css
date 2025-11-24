@@ -1,0 +1,406 @@
+/* API Client Styles */
+.api-client-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 0;
+}
+
+.api-section {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.api-section h2 {
+    color: #2c3e50;
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    font-size: 1.75rem;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 0.5rem;
+}
+
+.api-section h3 {
+    color: #34495e;
+    margin-top: 0;
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+}
+
+/* Authentication Section */
+.auth-section {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.auth-section h2,
+.auth-section h3 {
+    color: white;
+    border-bottom-color: rgba(255,255,255,0.3);
+}
+
+.auth-status {
+    margin-bottom: 1.5rem;
+    padding: 0.75rem;
+    background: rgba(255,255,255,0.2);
+    border-radius: 5px;
+    font-weight: 600;
+}
+
+.status-success {
+    color: #2ecc71;
+}
+
+.status-error {
+    color: #e74c3c;
+}
+
+.auth-forms {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+@media (max-width: 768px) {
+    .auth-forms {
+        grid-template-columns: 1fr;
+    }
+}
+
+.auth-form {
+    background: rgba(255,255,255,0.1);
+    padding: 1.5rem;
+    border-radius: 8px;
+}
+
+.auth-form form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.auth-form input {
+    padding: 0.75rem;
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 5px;
+    background: rgba(255,255,255,0.9);
+    font-size: 1rem;
+}
+
+.auth-form input:focus {
+    outline: none;
+    border-color: #3498db;
+    background: white;
+}
+
+.auth-form button,
+.logout-btn {
+    padding: 0.75rem 1.5rem;
+    background: #3498db;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.auth-form button:hover,
+.logout-btn:hover {
+    background: #2980b9;
+}
+
+.logout-btn {
+    width: 100%;
+    margin-top: 1rem;
+    background: #e74c3c;
+}
+
+.logout-btn:hover {
+    background: #c0392b;
+}
+
+/* Foods Section */
+.food-form-container {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    border: 2px solid #ecf0f1;
+}
+
+.food-form-container form {
+    display: grid;
+    grid-template-columns: 2fr 1fr auto;
+    gap: 1rem;
+    align-items: end;
+}
+
+@media (max-width: 768px) {
+    .food-form-container form {
+        grid-template-columns: 1fr;
+    }
+}
+
+.form-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.food-form-container input {
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+.food-form-container input:focus {
+    outline: none;
+    border-color: #3498db;
+}
+
+.food-form-container button {
+    padding: 0.75rem 1.5rem;
+    background: #27ae60;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s;
+    white-space: nowrap;
+}
+
+.food-form-container button:hover {
+    background: #229954;
+}
+
+.food-form-container button[type="button"] {
+    background: #95a5a6;
+}
+
+.food-form-container button[type="button"]:hover {
+    background: #7f8c8d;
+}
+
+.foods-list {
+    margin-top: 1rem;
+}
+
+.foods-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.foods-table thead {
+    background: #34495e;
+    color: white;
+}
+
+.foods-table th {
+    padding: 1rem;
+    text-align: left;
+    font-weight: 600;
+}
+
+.foods-table td {
+    padding: 1rem;
+    border-bottom: 1px solid #ecf0f1;
+}
+
+.foods-table tbody tr:hover {
+    background: #f8f9fa;
+}
+
+.foods-table .actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.btn-edit,
+.btn-delete {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-edit {
+    background: #3498db;
+    color: white;
+}
+
+.btn-edit:hover {
+    background: #2980b9;
+}
+
+.btn-delete {
+    background: #e74c3c;
+    color: white;
+}
+
+.btn-delete:hover {
+    background: #c0392b;
+}
+
+/* Favorites Section */
+.favorite-form-container {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    border: 2px solid #ecf0f1;
+}
+
+.favorite-form-container form {
+    display: grid;
+    grid-template-columns: 2fr auto;
+    gap: 1rem;
+    align-items: end;
+}
+
+@media (max-width: 768px) {
+    .favorite-form-container form {
+        grid-template-columns: 1fr;
+    }
+}
+
+.favorite-form-container select {
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    background: white;
+}
+
+.favorite-form-container select:focus {
+    outline: none;
+    border-color: #3498db;
+}
+
+.favorite-form-container button {
+    padding: 0.75rem 1.5rem;
+    background: #9b59b6;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s;
+    white-space: nowrap;
+}
+
+.favorite-form-container button:hover {
+    background: #8e44ad;
+}
+
+.favorites-list {
+    margin-top: 1rem;
+}
+
+.favorites-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.favorites-table thead {
+    background: #9b59b6;
+    color: white;
+}
+
+.favorites-table th {
+    padding: 1rem;
+    text-align: left;
+    font-weight: 600;
+}
+
+.favorites-table td {
+    padding: 1rem;
+    border-bottom: 1px solid #ecf0f1;
+}
+
+.favorites-table tbody tr:hover {
+    background: #f8f9fa;
+}
+
+/* Response Section */
+.response-section {
+    background: #2c3e50;
+    color: white;
+}
+
+.response-section h2 {
+    color: white;
+    border-bottom-color: rgba(255,255,255,0.3);
+}
+
+.response-display {
+    background: #1a252f;
+    border-radius: 8px;
+    padding: 1.5rem;
+    max-height: 400px;
+    overflow-y: auto;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+.response-display pre {
+    margin: 0;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.response-success {
+    color: #2ecc71;
+}
+
+.response-error {
+    color: #e74c3c;
+}
+
+/* Info Messages */
+.info-message {
+    padding: 1.5rem;
+    background: white;
+    border-radius: 8px;
+    text-align: center;
+    color: #7f8c8d;
+    font-style: italic;
+    border: 2px dashed #ecf0f1;
+}
+
+/* Scrollbar styling for response display */
+.response-display::-webkit-scrollbar {
+    width: 8px;
+}
+
+.response-display::-webkit-scrollbar-track {
+    background: #1a252f;
+}
+
+.response-display::-webkit-scrollbar-thumb {
+    background: #34495e;
+    border-radius: 4px;
+}
+
+.response-display::-webkit-scrollbar-thumb:hover {
+    background: #4a5f7a;
+}
