@@ -152,6 +152,7 @@
             <p>&copy; {{ now.Year }} {{ .Site.Params.author }}. Built with <a href="https://gohugo.io">Hugo</a>.</p>
         </div>
     </footer>
+    {{ block "scripts" . }}{{ end }}
 </body>
 </html>
 
