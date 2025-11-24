@@ -126,8 +126,6 @@ class EatoAPIClient {
     }
 
     async removeFavorite(favoriteId) {
-        // The Favorite model uses 'favorite_id' as primary key
-        // Laravel route model binding expects the favorite_id value
         return await this.request(`/favorites/${favoriteId}`, { method: 'DELETE' });
     }
 
@@ -178,10 +176,9 @@ class EatoAPIClientUI {
                                 <button type="submit">Login</button>
                             </form>
                         </div>
-                    </div>
-                    <div class="logout-container">
-                        <button id="logout-btn" class="logout-btn" style="display: none;">Logout</button>
-                    </div>
+                    </div>                    <div class="logout-container">
+                    <button id="logout-btn" class="logout-btn" style="display: none;">Logout</button>
+
                 </section>
 
                 <!-- Foods Section -->
@@ -517,10 +514,6 @@ class EatoAPIClientUI {
         const result = await this.client.getFavorites();
         if (result.success) {
             this.currentFavorites = result.data;
-            // Debug: log favorite structure to see what fields are available
-            if (this.currentFavorites.length > 0) {
-                console.log('Sample favorite:', this.currentFavorites[0]);
-            }
         } else {
             this.currentFavorites = [];
         }
@@ -554,21 +547,18 @@ class EatoAPIClientUI {
                 </thead>
                 <tbody>
                     ${this.currentFavorites.map(fav => {
-                        // Use favorite_id as primary key (not id)
-                        const favoriteId = fav.favorite_id || fav.id;
                         return `
                         <tr>
-                            <td>${favoriteId}</td>
+                            <td>${fav.favorite_id}</td>
                             <td>${fav.food_id}</td>
                             <td>${fav.food ? fav.food.food_name : 'N/A'}</td>
                             <td>${fav.food ? fav.food.calories : 'N/A'}</td>
                             <td>${this.formatDate(fav.updated_at)}</td>
                             <td class="actions">
-                                <button class="btn-delete" data-favorite-id="${favoriteId}">Remove</button>
+                                <button class="btn-delete" data-favorite-id="${fav.favorite_id}">Remove</button>
                             </td>
                         </tr>
-                    `;
-                    }).join('')}
+                    `}).join('')}
                 </tbody>
             </table>
         `;
