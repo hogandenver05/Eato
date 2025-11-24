@@ -176,9 +176,8 @@ class EatoAPIClientUI {
                                 <button type="submit">Login</button>
                             </form>
                         </div>
-                    </div>                    <div class="logout-container">
+                    </div>
                     <button id="logout-btn" class="logout-btn" style="display: none;">Logout</button>
-
                 </section>
 
                 <!-- Foods Section -->
