@@ -1,7 +1,5 @@
 {{ define "main" }}
-<link rel="stylesheet" href="/css/api-client.css">
-<script src="/js/api-client.js"></script>
-
+<link rel="stylesheet" href="{{ "css/api-client.css" | relURL }}">
 <div class="api-client-page">
     {{ .Content }}
 </div>

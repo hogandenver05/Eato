@@ -4,8 +4,6 @@ date: 2025-01-21
 draft: false
 ---
 
-# API Client
-
 Interactive web client to test the Eato Meal Tracker API endpoints. Make sure your Laravel API is running at `http://localhost:8000` before using this client.
 
 ## Instructions
@@ -26,3 +24,5 @@ Interactive web client to test the Eato Meal Tracker API endpoints. Make sure yo
 <div id="api-client-app">
   <!-- Content will be loaded by the JavaScript -->
 </div>
+
+<script src="../js/api-client.js" defer></script>
