@@ -114,10 +114,22 @@
     background: #2980b9;
 }
 
-.logout-btn {
-    width: 100%;
+.logout-container {
+    display: flex;
+    justify-content: center;
     margin-top: 1rem;
+}
+
+.logout-btn {
+    padding: 0.75rem 2rem;
     background: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s;
 }
 
 .logout-btn:hover {

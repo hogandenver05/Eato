@@ -36,11 +36,14 @@ class EatoAPIClient {
             const data = await response.json();
             
             if (!response.ok) {
+                // Log error details for debugging
+                console.error('API Error:', { url, status: response.status, data });
                 throw new Error(data.message || `HTTP ${response.status}: ${response.statusText}`);
             }
             
             return { success: true, data };
         } catch (error) {
+            console.error('Request failed:', { url, error: error.message });
             return { success: false, error: error.message };
         }
     }
@@ -123,6 +126,8 @@ class EatoAPIClient {
     }
 
     async removeFavorite(favoriteId) {
+        // The Favorite model uses 'favorite_id' as primary key
+        // Laravel route model binding expects the favorite_id value
         return await this.request(`/favorites/${favoriteId}`, { method: 'DELETE' });
     }
 
@@ -174,7 +179,9 @@ class EatoAPIClientUI {
                             </form>
                         </div>
                     </div>
-                    <button id="logout-btn" class="logout-btn" style="display: none;">Logout</button>
+                    <div class="logout-container">
+                        <button id="logout-btn" class="logout-btn" style="display: none;">Logout</button>
+                    </div>
                 </section>
 
                 <!-- Foods Section -->
@@ -394,6 +401,20 @@ class EatoAPIClientUI {
         this.renderFoods();
     }
 
+    // Helper function to format date (shared between renderFoods and renderFavorites)
+    formatDate(dateString) {
+        if (!dateString) return 'N/A';
+        const date = new Date(dateString);
+        return date.toLocaleString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric',
+            hour: 'numeric',
+            minute: '2-digit',
+            hour12: true
+        });
+    }
+
     renderFoods() {
         const foodsList = document.getElementById('foods-list');
         const favoriteSelect = document.getElementById('favorite-food-id');
@@ -415,9 +436,10 @@ class EatoAPIClientUI {
             <table class="foods-table">
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <th>Food ID</th>
                         <th>Food Name</th>
                         <th>Calories</th>
+                        <th>Last Updated</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -427,6 +449,7 @@ class EatoAPIClientUI {
                             <td>${food.id}</td>
                             <td>${food.food_name}</td>
                             <td>${food.calories}</td>
+                            <td>${this.formatDate(food.updated_at)}</td>
                             <td class="actions">
                                 <button class="btn-edit" data-food-id="${food.id}" data-food-name="${food.food_name.replace(/"/g, '&quot;')}" data-food-calories="${food.calories}">Edit</button>
                                 <button class="btn-delete" data-food-id="${food.id}">Delete</button>
@@ -494,6 +517,10 @@ class EatoAPIClientUI {
         const result = await this.client.getFavorites();
         if (result.success) {
             this.currentFavorites = result.data;
+            // Debug: log favorite structure to see what fields are available
+            if (this.currentFavorites.length > 0) {
+                console.log('Sample favorite:', this.currentFavorites[0]);
+            }
         } else {
             this.currentFavorites = [];
         }
@@ -521,21 +548,27 @@ class EatoAPIClientUI {
                         <th>Food ID</th>
                         <th>Food Name</th>
                         <th>Calories</th>
+                        <th>Last Updated</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    ${this.currentFavorites.map(fav => `
+                    ${this.currentFavorites.map(fav => {
+                        // Use favorite_id as primary key (not id)
+                        const favoriteId = fav.favorite_id || fav.id;
+                        return `
                         <tr>
-                            <td>${fav.id}</td>
+                            <td>${favoriteId}</td>
                             <td>${fav.food_id}</td>
                             <td>${fav.food ? fav.food.food_name : 'N/A'}</td>
                             <td>${fav.food ? fav.food.calories : 'N/A'}</td>
+                            <td>${this.formatDate(fav.updated_at)}</td>
                             <td class="actions">
-                                <button class="btn-delete" data-favorite-id="${fav.id}">Remove</button>
+                                <button class="btn-delete" data-favorite-id="${favoriteId}">Remove</button>
                             </td>
                         </tr>
-                    `).join('')}
+                    `;
+                    }).join('')}
                 </tbody>
             </table>
         `;
@@ -550,13 +583,21 @@ class EatoAPIClientUI {
 }
 
 // Initialize when DOM is ready
-let apiClientUI;
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-        apiClientUI = new EatoAPIClientUI();
-        apiClientUI.init();
-    });
-} else {
+function initAPIClient() {
+    const appDiv = document.getElementById('api-client-app');
+    if (!appDiv) {
+        console.error('api-client-app div not found');
+        return;
+    }
+    
     apiClientUI = new EatoAPIClientUI();
     apiClientUI.init();
+}
+
+let apiClientUI;
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAPIClient);
+} else {
+    // DOM already loaded, but wait a tick to ensure content is rendered
+    setTimeout(initAPIClient, 0);
 }
