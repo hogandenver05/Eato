@@ -14,8 +14,28 @@ This project implements user registration, login, food tracking, and favorites u
 * JSON-based API endpoints
 * Docker containerization for easy deployment
 * Automated deployment scripts
+* Interactive web API client for testing
 
 ---
+
+## Quick Start
+
+### Prerequisites
+- Docker and Docker Compose installed
+
+1. **Clone the Repo**
+   ```bash
+   git clone https://github.com/hogandenver05/Eato.git
+   cd Eato
+   ```
+
+2. **Start the API:**
+   ```bash
+   ./setup.sh
+   ```
+
+3. **Use the Interactive API Client:**
+   Visit [https://hogandenver05.github.io/Eato/api-client/](https://hogandenver05.github.io/Eato/api-client/) to test all API endpoints in your browser. Alternatively, see the [Local Development](#local-development) section below for manual setup and running locally.
 
 ## API Endpoints
 
@@ -132,82 +152,26 @@ curl -X DELETE http://localhost:8000/api/favorites/1 \
 
 ---
 
-## Setup Instructions
+## Project Structure
 
-### Option 1: Docker Deployment (Recommended)
+- `app/Http/Controllers/` - API controllers
+- `app/Models/` - Eloquent models
+- `routes/api.php` - API route definitions
+- `database/migrations/` - Database migrations
+- `docker-compose.yml` - Docker services configuration
+- `Dockerfile` - Laravel application container
+- `setup.sh` - Docker deployment script
+- `run.sh` - Local development deployment script
 
-The easiest way to get started is using Docker. This will automatically set up the database and Laravel application.
+## Local Development
 
-#### Prerequisites
-
-- Docker and Docker Compose installed
-  - [Docker Desktop](https://www.docker.com/products/docker-desktop) (macOS/Windows)
-  - Or [Colima](https://github.com/abiosoft/colima) (lightweight alternative): `brew install colima docker docker-compose`
-
-#### Quick Start
-
-1. **Run the setup script:**
-
-```bash
-./setup.sh
-```
-
-This script will:
-- Check for Docker installation
-- Build Docker containers
-- Start MySQL and Laravel services
-- Wait for database to be ready
-- Run migrations
-- Generate application key
-
-2. **Access the API:**
-
-The API will be available at `http://localhost:8000/api`
-
-#### Manual Docker Commands
-
-If you prefer to run commands manually:
-
-```bash
-# Copy Docker environment file
-cp .env.docker .env
-
-# Build and start containers
-docker-compose up -d
-
-# Wait for database, then run migrations
-docker-compose exec app php artisan migrate
-
-# Generate application key
-docker-compose exec app php artisan key:generate
-```
-
-#### Stop Containers
-
-```bash
-docker-compose down
-```
-
-#### View Logs
-
-```bash
-# All services
-docker-compose logs -f
-
-# Specific service
-docker-compose logs -f app
-docker-compose logs -f db
-```
-
-### Option 2: Local Development (Without Docker)
-
-#### Prerequisites
+### Prerequisites
 
 - PHP 8.2+
 - Composer
 - MySQL 8.0+
 
-#### Setup Steps
+### Setup Steps
 
 1. **Install dependencies:**
 
@@ -242,48 +206,17 @@ php artisan migrate
 4. **Start the development server:**
 
 ```bash
-php artisan serve
-```
-
-Or use the automated script:
-
-```bash
 ./run.sh
 ```
 
 The API will be available at `http://localhost:8000/api`
 
----
-
-## Testing
+### Testing
 
 Run the test suite:
 
 ```bash
-# With Docker
-docker-compose exec app php artisan test
-
-# Local development
 php artisan test
 ```
 
 ---
-
-## Project Structure
-
-- `app/Http/Controllers/` - API controllers
-- `app/Models/` - Eloquent models
-- `routes/api.php` - API route definitions
-- `database/migrations/` - Database migrations
-- `docker-compose.yml` - Docker services configuration
-- `Dockerfile` - Laravel application container
-- `setup.sh` - Docker deployment script
-- `run.sh` - Local development deployment script
-
----
-
-## Next Steps
-
-* Deploy documentation via Hugo to GitHub Pages
-* Enhance test client UI/UX
-* Expand features to track macros, not just calories

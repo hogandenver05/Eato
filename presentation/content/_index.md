@@ -24,7 +24,7 @@ This project implements user registration, login, food tracking, and favorites u
 ## Quick Links
 
 - [API Client]({{< relref "/api-client" >}}) - Interactive API testing tool
-- [Portfolio]({{< relref "/portfolio" >}}) - ASE 230 Projects showcase
+- [Portfolio](https://hogandenver05.github.io)
 - [GitHub Repository](https://github.com/hogandenver05/Eato)
 
 ## Project Evolution
