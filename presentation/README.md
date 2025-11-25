@@ -1,13 +1,12 @@
 # Hugo Documentation Site
 
-This directory contains the Hugo static site for the **Eato Meal Tracker** documentation and portfolio. This is part of the [Eato Meal Tracker project](../README.md).
+This directory contains the Hugo static site for the **Eato Meal Tracker** documentation. This is part of the [Eato Meal Tracker project](../README.md).
 
 ## Structure
 
 - `content/` - Markdown content files
   - `_index.md` - Homepage with project overview
   - `api-client/` - Interactive API client page
-  - `portfolio/` - Portfolio showcase
 - `layouts/` - HTML templates
   - `api-client/` - Custom layout for API client page
 - `static/` - Static assets
@@ -59,7 +58,6 @@ Visit `http://localhost:1313` to view the site.
 3. **Open in browser**:
    - Homepage: http://localhost:1313
    - API Client: http://localhost:1313/api-client/
-   - Portfolio: http://localhost:1313/portfolio/
 
 4. **Test the API Client**:
    - Register a new user
@@ -93,7 +91,6 @@ Use GitHub Actions to automatically build and deploy on push (see `.github/workf
 
 - **Homepage** (`content/_index.md`) - Overview of the Eato project, API endpoints, and project evolution
 - **API Client** (`content/api-client/_index.md`) - Interactive web client for testing API endpoints
-- **Portfolio** (`content/portfolio/_index.md`) - ASE 230 projects showcase
 
 ## API Client
 

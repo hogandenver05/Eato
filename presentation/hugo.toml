@@ -1,6 +1,6 @@
 baseURL = 'https://hogandenver05.github.io/Eato/'
 languageCode = 'en-us'
-title = 'Eato Meal Tracker - Portfolio'
+title = 'Eato Meal Tracker'
 
 [params]
   description = 'A RESTful API built with Laravel and MySQL for ASE 230 Project 1 & 2'
@@ -17,11 +17,6 @@ title = 'Eato Meal Tracker - Portfolio'
     name = 'API Client'
     url = '/api-client/'
     weight = 2
-  [[menu.main]]
-    identifier = 'portfolio'
-    name = 'Portfolio'
-    url = '/portfolio/'
-    weight = 3
 
 [markup]
   [markup.goldmark]
