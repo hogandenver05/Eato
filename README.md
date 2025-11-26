@@ -218,5 +218,3 @@ Run the test suite:
 ```bash
 php artisan test
 ```
-
----
