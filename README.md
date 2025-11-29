@@ -216,5 +216,9 @@ The API will be available at `http://localhost:8000/api`
 Run the test suite:
 
 ```bash
+# With Docker
+docker-compose exec app php artisan test
+
+# Local development
 php artisan test
 ```
