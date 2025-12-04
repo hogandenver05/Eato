@@ -29,13 +29,57 @@ php artisan key:generate
 
 # Step five: verify database settings
 echo "Checking database connection"
+php -r "
+// Load .env file
+\$envFile = __DIR__ . '/.env';
+if (!file_exists(\$envFile)) {
+    echo 'Error: .env file not found' . PHP_EOL;
+    exit(1);
+}
 
-php artisan db:show >/dev/null 2>&1 || {
+\$env = [];
+foreach (file(\$envFile) as \$line) {
+    \$line = trim(\$line);
+    if (empty(\$line) || \$line[0] === '#') continue;
+    if (strpos(\$line, '=') === false) continue;
+    list(\$key, \$value) = explode('=', \$line, 2);
+    \$key = trim(\$key);
+    \$value = trim(\$value);
+    // Remove quotes if present
+    if ((substr(\$value, 0, 1) === '\"' && substr(\$value, -1) === '\"') || 
+        (substr(\$value, 0, 1) === \"'\" && substr(\$value, -1) === \"'\")) {
+        \$value = substr(\$value, 1, -1);
+    }
+    \$env[\$key] = \$value;
+}
+
+\$host = \$env['DB_HOST'] ?? '127.0.0.1';
+\$port = \$env['DB_PORT'] ?? '3306';
+\$database = \$env['DB_DATABASE'] ?? '';
+\$username = \$env['DB_USERNAME'] ?? 'root';
+\$password = \$env['DB_PASSWORD'] ?? '';
+
+if (empty(\$database)) {
+    echo 'Error: DB_DATABASE not set in .env file' . PHP_EOL;
+    exit(1);
+}
+
+try {
+    \$dsn = 'mysql:host=' . \$host . ';port=' . \$port . ';dbname=' . \$database;
+    \$pdo = new PDO(\$dsn, \$username, \$password);
+    \$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    // Test the connection
+    \$pdo->query('SELECT 1');
+    echo 'Database connection successful' . PHP_EOL;
+    exit(0);
+} catch (Exception \$e) {
+    echo 'Database connection failed: ' . \$e->getMessage() . PHP_EOL;
+    exit(1);
+}
+" || {
     echo "Database connection failed"
     exit 1
 }
-
-echo "Database connection successful"
 
 # Step six: run migrations
 echo "Running migrations"
